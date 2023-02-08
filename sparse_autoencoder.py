@@ -37,17 +37,17 @@ path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 #############################
 # Parameters Training
 #noise during training the autoencoder
-sig_neu=0.2 # noise neurons autoencoder
-sig_inp=0.2 # noise input
-sig_init=0.2 #noise weight initialization autoencoder
+sig_neu=0.1 # noise neurons autoencoder
+sig_inp=1 # noise input
+sig_init=1 #noise weight initialization autoencoder
 n_inp=10
-n_hidden=100 # number hidden units in the autoencoder
+n_hidden=10 # number hidden units in the autoencoder
 
-n_trials=10
-n_files=10 # number of files (sessions)
+n_trials=100
+n_files=5 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
-lr=1e-4 # learning rate
+lr=1e-3 # learning rate
 n_epochs=500 #number of max epochs if conv criteria is not reached
 
 # Define the stimulus
