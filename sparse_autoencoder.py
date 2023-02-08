@@ -37,18 +37,18 @@ path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 #############################
 # Parameters Training
 #noise during training the autoencoder
-sig_neu=0.5 # noise neurons autoencoder
-sig_inp=0.5 # noise input
-sig_init=0.5 #noise weight initialization autoencoder
+sig_neu=0.2 # noise neurons autoencoder
+sig_inp=0.2 # noise input
+sig_init=0.2 #noise weight initialization autoencoder
 n_inp=10
-n_hidden=20 # number hidden units in the autoencoder
+n_hidden=100 # number hidden units in the autoencoder
 
 n_trials=10
-n_files=5 # number of files (sessions)
+n_files=10 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
-lr=1e-3 # learning rate
-n_epochs=200 #number of max epochs if conv criteria is not reached
+lr=1e-4 # learning rate
+n_epochs=500 #number of max epochs if conv criteria is not reached
 
 # Define the stimulus
 x_pre=np.array([[-1,-1],
@@ -85,6 +85,8 @@ for k in range(n_files):
 # Plot Loss
 loss_m=np.mean(loss_epochs,axis=0)
 plt.plot(loss_m)
+plt.ylabel('Training Loss')
+plt.xlabel('Epochs')
 plt.show()
         
 # Plot performance
@@ -95,9 +97,9 @@ perf_diff_m=np.mean(perf_diff,axis=0)
 plt.plot(perf_out_m[:,1],color='blue',label='Out')
 plt.plot(perf_diff_m[:,1],color='red',label='Diff')
 plt.plot(perf_m[1]*np.ones(n_epochs),color='grey',label='Input')
-plt.plot(perf_out_m[:,0],color='blue',linestyle='--')
-plt.plot(perf_diff_m[:,0],color='red',linestyle='--')
-plt.plot(perf_m[0]*np.ones(n_epochs),color='grey',linestyle='--')
+#plt.plot(perf_out_m[:,0],color='blue',linestyle='--')
+#plt.plot(perf_diff_m[:,0],color='red',linestyle='--')
+#plt.plot(perf_m[0]*np.ones(n_epochs),color='grey',linestyle='--')
 plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
 plt.ylim([0,1.1])
 plt.ylabel('Decoding Performance')
