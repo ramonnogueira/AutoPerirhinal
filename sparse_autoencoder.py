@@ -31,13 +31,15 @@ import warnings
 warnings.warn = warn
 nan=float('nan')
 
+# Ramon's Local Path to save figures
 path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 
 #############################
 # Parameters Training
 #noise during training the autoencoder
-sig_neu=0.5#0.5
-sig_inp=0.5#sig_neu
+sig_neu=0.5 # noise neurons autoencoder
+sig_inp=0.5 # noise input
+sig_init=0.5 +noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 
@@ -49,7 +51,7 @@ lr=1e-3 # learning rate
 n_epochs=200 #number of max epochs if conv criteria is not reached
 
 # Define the stimulus
-x_pre=np.array([[-2,-1],
+x_pre=np.array([[-1,-1],
                 [-1,1],
                 [1,-1],
                 [1,1]])
@@ -72,7 +74,7 @@ for k in range(n_files):
                                 
     # Fit the autoencoders
     x_torch=Variable(torch.from_numpy(np.array(x,dtype=np.float32)),requires_grad=False)
-    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_noise=sig_inp) 
+    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init) 
     loss_vec,data_epochs=miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu)
     loss_epochs[k]=loss_vec
 

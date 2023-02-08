@@ -67,23 +67,20 @@ def fit_autoencoder(model,data,n_epochs,batch_size,lr,sigma_noise):
 
 # Autoencoder Architecture
 class sparse_autoencoder_1(nn.Module):
-    def __init__(self,n_inp,n_hidden,sigma_noise):
+    def __init__(self,n_inp,n_hidden,sigma_init):
         super(sparse_autoencoder_1,self).__init__()
         self.n_inp=n_inp
         self.n_hidden=n_hidden
-        self.sigma_noise=sigma_noise
+        self.sigma_init=sigma_init
         self.enc=torch.nn.Linear(n_inp,n_hidden)
         self.dec=torch.nn.Linear(n_hidden,n_inp)
         self.apply(self._init_weights)
         
     def _init_weights(self, module):
         if isinstance(module, nn.Linear):
-            module.weight.data.normal_(mean=0.0, std=0.01)
-            #module.weight.data.normal_(mean=0.0, std=self.sigma_noise)
+            module.weight.data.normal_(mean=0.0, std=self.sigma_init)
             if module.bias is not None:
-                module.bias.data.normal_(mean=0.0, std=0.01)
-                #module.bias.data.normal_(mean=0.0, std=self.sigma_noise)
-                #module.bias.data.zero_()
+                module.bias.data.normal_(mean=0.0, std=self.sigma_init)
         
     def forward(self,x,sigma_noise):
         x_hidden = F.relu(self.enc(x))+sigma_noise*torch.randn(x.size(0),self.n_hidden)
