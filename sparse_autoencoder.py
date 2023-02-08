@@ -39,7 +39,7 @@ path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 #noise during training the autoencoder
 sig_neu=0.5 # noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.5 +noise weight initialization autoencoder
+sig_init=0.5 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 
