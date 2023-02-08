@@ -49,7 +49,7 @@ lr=1e-3 # learning rate
 n_epochs=200 #number of max epochs if conv criteria is not reached
 
 # Define the stimulus
-x_pre=np.array([[-1,-1],
+x_pre=np.array([[-2,-1],
                 [-1,1],
                 [1,-1],
                 [1,1]])
