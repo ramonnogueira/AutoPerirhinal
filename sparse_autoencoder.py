@@ -39,19 +39,19 @@ path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 #noise during training the autoencoder
 sig_neu=0.5 # noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.1 #noise weight initialization autoencoder
+sig_init=0.25 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
-beta=1 # between 0 and 1. 0 only reconstruction, 1 only decoding
-beta_sp=1e-10
+beta=0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
+beta_sp=10
 p_norm=2
 
 n_trials=100
-n_files=2 # number of files (sessions)
+n_files=5 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
-lr=1e-3 # learning rate
-n_epochs=500 #number of max epochs if conv criteria is not reached
+lr=1e-2 # learning rate
+n_epochs=200 #number of max epochs if conv criteria is not reached
 
 # Define the stimulus
 x_pre=np.array([[-1,-1],
@@ -88,10 +88,10 @@ for k in range(n_files):
     loss_epochs[k,:,3]=loss_vec
 
     for i in range(n_epochs):
-        #perf_dire[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,0],1) # Decode direction
-        #perf_speed[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,1],1) # Decode Speed
-        perf_dire[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,0],1) # Decode direction
-        perf_speed[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,1],1) # Decode Speed
+        perf_dire[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,0],1) # Decode direction
+        perf_speed[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,1],1) # Decode Speed
+        #perf_dire[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,0],1) # Decode direction
+        #perf_speed[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,1],1) # Decode Speed
         perfh_dire[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,0],1) # Decode direction
         perfh_speed[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,1],1) # Decode Speed
 
