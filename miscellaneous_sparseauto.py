@@ -78,7 +78,7 @@ def fit_autoencoder(model,data,clase,n_epochs,batch_size,lr,sigma_noise,beta,bet
             optimizer.step() # weight update
         t=(t+1)
     model.eval()
-    return np.array(loss_rec_vec),np.array(loss_ce_vec),np.array(loss_sp),np.array(loss_vec),np.array(data_epochs),np.array(data_hidden)
+    return np.array(loss_rec_vec),np.array(loss_ce_vec),np.array(loss_sp_vec),np.array(loss_vec),np.array(data_epochs),np.array(data_hidden)
 
 # Autoencoder Architecture
 class sparse_autoencoder_1(nn.Module):

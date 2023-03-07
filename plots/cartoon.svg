@@ -1313,17 +1313,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142135"
-     inkscape:cx="67.752851"
-     inkscape:cy="326.80481"
+     inkscape:zoom="0.70710675"
+     inkscape:cx="271.8691"
+     inkscape:cy="126.264"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="in"
-     inkscape:window-width="1360"
-     inkscape:window-height="731"
-     inkscape:window-x="2560"
-     inkscape:window-y="0"
+     inkscape:window-width="1208"
+     inkscape:window-height="736"
+     inkscape:window-x="1352"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:snap-global="false" />
   <metadata
@@ -1800,8 +1800,8 @@
        id="g7976"
        transform="translate(0,0.52916667)"
        inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal.png"
-       inkscape:export-xdpi="100"
-       inkscape:export-ydpi="100">
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200">
       <g
          transform="matrix(0.85737499,0,0,0.85737499,97.962286,62.740908)"
          id="g6035-1"
@@ -2428,44 +2428,44 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="111.12128"
-       y="260.15683"
+       x="109.79836"
+       y="193.48183"
        id="text7980"
        inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal.png"
        inkscape:export-xdpi="100"
        inkscape:export-ydpi="100"><tspan
          sodipodi:role="line"
          id="tspan7978"
-         x="111.12128"
-         y="260.15683"
+         x="109.79836"
+         y="193.48183"
          style="font-size:3.52777767px;stroke-width:0.26458332">Input</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="125.58189"
-       y="253.5218"
+       x="125.84647"
+       y="193.72597"
        id="text7984"
        inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal.png"
        inkscape:export-xdpi="100"
        inkscape:export-ydpi="100"><tspan
          sodipodi:role="line"
          id="tspan7982"
-         x="125.58189"
-         y="253.5218"
+         x="125.84647"
+         y="193.72597"
          style="font-size:3.52777767px;stroke-width:0.26458332">Perirhinal</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
-       x="145.54337"
-       y="260.40491"
+       x="146.6017"
+       y="193.20074"
        id="text7980-8"
        inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal.png"
        inkscape:export-xdpi="100"
        inkscape:export-ydpi="100"><tspan
          sodipodi:role="line"
          id="tspan7978-4"
-         x="145.54337"
-         y="260.40491"
+         x="146.6017"
+         y="193.20074"
          style="font-size:3.52777767px;stroke-width:0.26458332">Output</tspan></text>
     <text
        id="text16521-6-2-9-6-8"
@@ -3306,5 +3306,91 @@
        inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal_class.png"
        inkscape:export-xdpi="200"
        inkscape:export-ydpi="200" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.21400002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.428, 0.428;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 150.98548,265.34339 13.18285,10.04184"
+       id="path4702-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal_class2.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.21400002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.428, 0.428;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 150.98548,269.31533 13.23856,6.05507"
+       id="path4704-6"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal_class2.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.21400002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.428, 0.428;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 150.92437,273.47059 13.25306,1.8924"
+       id="path4706-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal_class2.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.21400002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.428, 0.428;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 150.86326,277.44253 13.31386,-2.05286"
+       id="path4708-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal_class2.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.21400002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.428, 0.428;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 150.92437,281.35336 13.25476,-5.9748"
+       id="path4710-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal_class2.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.21400002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.428, 0.428;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 150.92437,285.26419 13.22743,-9.85725"
+       id="path4712-5"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/ramon/Documents/github_repos/AutoEntorhinal/autoentorhinal_class2.png"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200" />
+    <g
+       id="g4807-8-6"
+       transform="matrix(0.85737499,0,0,0.85737499,37.600504,91.179485)"
+       inkscape:export-xdpi="200"
+       inkscape:export-ydpi="200">
+      <path
+         sodipodi:open="true"
+         transform="matrix(0.99877489,0.04948449,0.04948449,-0.99877489,0,0)"
+         d="m 162.15203,-206.95076 a 2.1354458,2.0348005 0 0 1 -1.14619,1.75747 2.1354458,2.0348005 0 0 1 -2.1686,-0.10757 2.1354458,2.0348005 0 0 1 -0.94848,-1.86138"
+         sodipodi:end="3.2229608"
+         sodipodi:start="0.022654433"
+         sodipodi:ry="2.0348005"
+         sodipodi:rx="2.1354458"
+         sodipodi:cy="-206.99686"
+         sodipodi:cx="160.01714"
+         sodipodi:type="arc"
+         id="path4279-5-6-2-4-7-6-2"
+         style="opacity:1;fill:#0000ff;fill-opacity:0.26086958;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.70000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         sodipodi:open="true"
+         transform="rotate(-1.5522936)"
+         d="m 145.84094,218.73474 a 2.1345818,2.04567 0 0 1 -2.19805,1.91641 2.1345818,2.04567 0 0 1 -2.06692,-2.04605"
+         sodipodi:end="3.14228"
+         sodipodi:start="0.06272737"
+         sodipodi:ry="2.04567"
+         sodipodi:rx="2.1345818"
+         sodipodi:cy="218.60651"
+         sodipodi:cx="143.71056"
+         sodipodi:type="arc"
+         id="path4279-5-6-2-4-7-4-0-9"
+         style="opacity:1;fill:#ff0000;fill-opacity:0.52657004;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.70200002;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
   </g>
 </svg>
