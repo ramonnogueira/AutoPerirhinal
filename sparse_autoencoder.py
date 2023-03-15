@@ -31,6 +31,28 @@ import warnings
 warnings.warn = warn
 nan=float('nan')
 
+def adjust_spines(ax, spines):
+    for loc, spine in ax.spines.items():
+        if loc in spines: 
+            if loc=='left':
+                spine.set_position(('outward', 10))  # outward by 10 points
+            if loc=='bottom':
+                spine.set_position(('outward', 0))  # outward by 10 points
+         #   spine.set_smart_bounds(True)
+        else:
+            spine.set_color('none')  # don't draw spine
+    # turn off ticks where there is no spine
+    if 'left' in spines:
+        ax.yaxis.set_ticks_position('left')
+    else:
+        # no yaxis ticks
+        ax.yaxis.set_ticks([])
+    if 'bottom' in spines:
+        ax.xaxis.set_ticks_position('bottom')
+    else:
+        # no xaxis ticks
+        ax.xaxis.set_ticks([])
+
 # Ramon's Local Path to save figures
 path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 
@@ -41,7 +63,7 @@ path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 # n_inp=10
 # n_hidden=20 # number hidden units in the autoencoder
 # beta=0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
-# beta_sp=10
+# beta_sp=10 (20 even better)
 # p_norm=2
 # n_trials=100
 # n_files=5 # number of files (sessions)
@@ -55,10 +77,10 @@ path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 #noise during training the autoencoder
 sig_neu=0.5 # noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.5 #noise weight initialization autoencoder
+sig_init=1 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
-beta=0.9999#0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
+beta=0.999#0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
 beta_sp=10
 p_norm=2
 
@@ -75,16 +97,20 @@ x_pre=np.array([[-1,-1],
                 [1,-1],
                 [1,1]])
 
+delta=1
+
 #perf_orig=np.zeros((n_files,2))
 perf_dire=np.zeros((n_files,n_epochs,2))
 perf_speed=np.zeros((n_files,n_epochs,2))
+perf_dire_diff=np.zeros((n_files,n_epochs,2))
+perf_speed_diff=np.zeros((n_files,n_epochs,2))
 perfh_dire=np.zeros((n_files,n_epochs,2))
 perfh_speed=np.zeros((n_files,n_epochs,2))
 loss_epochs=np.zeros((n_files,n_epochs,4))
 for k in range(n_files):
     print (k)
     mat_exp=np.random.normal(0,1/np.sqrt(n_inp),(2,n_inp))
-    x_exp=np.dot(x_pre,mat_exp)
+    x_exp=np.dot(delta*x_pre,mat_exp)
     x=np.zeros((len(x_pre)*n_trials,n_inp))
     clase=np.zeros((len(x_pre)*n_trials,2)) # dim0: direction, dim1: speed
     for i in range(len(x_pre)):
@@ -104,33 +130,39 @@ for k in range(n_files):
     loss_epochs[k,:,3]=loss_vec
 
     for i in range(n_epochs):
-        #perf_dire[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,0],1) # Decode direction
-        #perf_speed[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,1],1) # Decode Speed
         perf_dire[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,0],1) # Decode direction
         perf_speed[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,1],1) # Decode Speed
+        perf_dire_diff[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,0],1) # Decode direction
+        perf_speed_diff[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,1],1) # Decode Speed
         perfh_dire[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,0],1) # Decode direction
         perfh_speed[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,1],1) # Decode Speed
 
 # Plot Loss
-loss_m=np.mean(loss_epochs,axis=0)
-plt.plot(loss_m[:,0],color='blue',label='Reconstr.')
-plt.plot(loss_m[:,1],color='red',label='Class.')
-plt.plot(loss_m[:,2],color='green',label='Sparsity')
-plt.plot(loss_m[:,3],color='black',label='Total')
-plt.ylabel('Training Loss')
-plt.xlabel('Epochs')
-plt.legend(loc='best')
-plt.show()
+# loss_m=np.mean(loss_epochs,axis=0)
+# plt.plot(loss_m[:,0],color='blue',label='Reconstr.')
+# plt.plot(loss_m[:,1],color='red',label='Class.')
+# plt.plot(loss_m[:,2],color='green',label='Sparsity')
+# plt.plot(loss_m[:,3],color='black',label='Total')
+# plt.ylabel('Training Loss')
+# plt.xlabel('Epochs')
+# plt.legend(loc='best')
+# plt.show()
         
 # Plot performance
 #perf_m=np.mean(perf_orig,axis=0)
 perf_dire_m=np.mean(perf_dire,axis=0)
 perf_speed_m=np.mean(perf_speed,axis=0)
+perf_dire_dm=np.mean(perf_dire_diff,axis=0)
+perf_speed_dm=np.mean(perf_speed_diff,axis=0)
 perfh_dire_m=np.mean(perfh_dire,axis=0)
 perfh_speed_m=np.mean(perfh_speed,axis=0)
 
-plt.plot(perf_dire_m[:,1],color='red',label='Output Direction')
-plt.plot(perf_speed_m[:,1],color='blue',label='Output Speed')
+plt.plot(perf_dire_dm[:,1],color='red',label='Output Direction')
+plt.plot(perf_speed_dm[:,1],color='blue',label='Output Speed')
+#plt.plot(perf_dire_dm[:,0],color='red',linestyle='--',label='Hidden Direction')
+#plt.plot(perf_speed_dm[:,0],color='blue',linestyle='--',label='Hidden Speed')
+#plt.plot(perf_dire_m[:,1],color='red',label='Output Direction')
+#plt.plot(perf_speed_m[:,1],color='blue',label='Output Speed')
 #plt.plot(perf_m[1]*np.ones(n_epochs),color='grey',label='Input')
 plt.plot(perfh_dire_m[:,1],color='red',linestyle='--',label='Hidden Direction')
 plt.plot(perfh_speed_m[:,1],color='blue',linestyle='--',label='Hidden Speed')
@@ -141,3 +173,24 @@ plt.ylabel('Decoding Performance')
 plt.xlabel('Epochs')
 plt.legend(loc='best')
 plt.show()
+
+# Plot Direction
+# fig=plt.figure(figsize=(5,2))
+# ax=fig.add_subplot(1,2,1)
+# adjust_spines(ax,['left','bottom'])
+# plt.plot(perf_dire_dm[:,1],color='black')
+# plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+# ax.set_ylim([0.4,1])
+# ax.set_title('Decode Direction')
+# ax.set_ylabel('Decoding Performance')
+# ax.set_xlabel('Training Stage')
+
+# # Plot Speed
+# ax=fig.add_subplot(1,2,2)
+# adjust_spines(ax,['left','bottom'])
+# plt.plot(perf_speed_dm[:,1],color='black')
+# plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+# ax.set_ylim([0.4,1])
+# ax.set_title('Decode Speed')
+# ax.set_xlabel('Training Stage')
+# fig.savefig('/home/ramon/Documents/github_repos/AutoPerirhinal/plots/decoding_direction_speed.pdf',dpi=500,bbox_inches='tight')
