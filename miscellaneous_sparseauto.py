@@ -38,7 +38,7 @@ def classifier(data,clase,reg):
     return np.mean(perf,axis=0)
 
 # Fit the autoencoder. The data needs to be in torch format
-def fit_autoencoder(model,data,clase,n_epochs,batch_size,lr,sigma_noise,beta,beta_sp,p_norm):
+def fit_autoencoder(model,data,clase,n_epochs,batch_size,lr,sigma_noise,betar,betac,betas,p_norm):
     train_loader=DataLoader(torch.utils.data.TensorDataset(data,data,clase),batch_size=batch_size,shuffle=True)
     optimizer=torch.optim.Adam(model.parameters(), lr=lr)
     loss1=torch.nn.MSELoss()
@@ -60,7 +60,7 @@ def fit_autoencoder(model,data,clase,n_epochs,batch_size,lr,sigma_noise,beta,bet
         loss_rec=loss1(outp[0],data).item()
         loss_ce=loss2(outp[2],clase).item()
         loss_sp=sparsity_loss(outp[2],p_norm).item()
-        loss_total=((1-beta)*loss_rec+beta*loss_ce+beta_sp*loss_sp)
+        loss_total=(betar*loss_rec+betac*loss_ce+betas*loss_sp)
         loss_rec_vec.append(loss_rec)
         loss_ce_vec.append(loss_ce)
         loss_sp_vec.append(loss_sp)
@@ -73,7 +73,7 @@ def fit_autoencoder(model,data,clase,n_epochs,batch_size,lr,sigma_noise,beta,bet
             loss_r=loss1(output[0],targ2) # reconstruction error
             loss_cla=loss2(output[2],cla) # cross entropy error
             loss_s=sparsity_loss(output[2],p_norm)
-            loss_t=((1-beta)*loss_r+beta*loss_cla+beta_sp*loss_s)
+            loss_t=(betar*loss_r+betac*loss_cla+betas*loss_s)
             loss_t.backward() # compute gradient
             optimizer.step() # weight update
         t=(t+1)
