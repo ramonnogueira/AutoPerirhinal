@@ -56,23 +56,7 @@ def adjust_spines(ax, spines):
 # Ramon's Local Path to save figures
 path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 
-# Working params
-# sig_neu=0.5 # noise neurons autoencoder
-# sig_inp=0.5 # noise input
-# sig_init=0.25 #noise weight initialization autoencoder
-# n_inp=10
-# n_hidden=20 # number hidden units in the autoencoder
-# beta=0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
-# beta_sp=10 (20 even better)
-# p_norm=2
-# n_trials=100
-# n_files=5 # number of files (sessions)
-# batch_size=10 # batch size when fitting network
-# lr=1e-2 # learning rate
-# n_epochs=200 #number of max epochs if conv criteria is not reached
-# Also works with p_norm=1 and betas=1
 
-#############################
 # Parameters Training
 #noise during training the autoencoder
 sig_neu_vec=[0.1,0.5,1] 
