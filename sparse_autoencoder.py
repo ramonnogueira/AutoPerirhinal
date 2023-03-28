@@ -53,8 +53,6 @@ def adjust_spines(ax, spines):
         # no xaxis ticks
         ax.xaxis.set_ticks([])
 
-# Ramon's Local Path to save figures
-path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 
 # Working params
 # sig_neu=0.5 # noise neurons autoencoder
@@ -73,6 +71,7 @@ path_plots='/home/ramon/Documents/github_repos/AutoEnthorinal/'
 # Also works with p_norm=1 and betas=1
 
 #############################
+# sig_neu parece que controla donde empieza la perf de la curva azul y donde acaba. Si es ~0.3, empieza muy arriba, baja mucho y vuelve a subir. Si es ~0.8, empieza bastante abajo pero no sube lo suficiente. 
 # Parameters Training
 #noise during training the autoencoder
 sig_neu=0.5 # noise neurons autoencoder
@@ -88,7 +87,7 @@ betas=10
 p_norm=2
 
 n_trials=100
-n_files=2 # number of files (sessions)
+n_files=5 # number of files (sessions)
 
 delta=1
 
@@ -102,7 +101,7 @@ x_pre=np.array([[-1,-1],
                 [1,-1],
                 [1,1]])
 
-#perf_orig=np.zeros((n_files,2))
+perf_orig=np.zeros((n_files,2,2))
 perf_dire=np.zeros((n_files,n_epochs,2))
 perf_speed=np.zeros((n_files,n_epochs,2))
 perf_dire_diff=np.zeros((n_files,n_epochs,2))
@@ -112,21 +111,29 @@ perfh_speed=np.zeros((n_files,n_epochs,2))
 loss_epochs=np.zeros((n_files,n_epochs,4))
 for k in range(n_files):
     print (k)
+    mat_exp_pre=np.random.normal(0,1/np.sqrt(n_inp),(2,n_inp))
     mat_exp=np.random.normal(0,1/np.sqrt(n_inp),(2,n_inp))
     x_exp=np.dot(delta*x_pre,mat_exp)
-    x=np.zeros((len(x_pre)*n_trials,n_inp))
+    x_auto=np.zeros((len(x_pre)*n_trials,n_inp)) # Dataset to train the autoencoder and the additional cross-entropy for the additional unit
+    x=np.zeros((len(x_pre)*n_trials,n_inp)) # Dataset to train/test the classifiers
     clase=np.zeros((len(x_pre)*n_trials,2)) # dim0: direction, dim1: speed
     for i in range(len(x_pre)):
+        x_auto[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_exp[i],sig_inp,(n_trials,n_inp)))
         x[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_exp[i],sig_inp,(n_trials,n_inp)))
         clase[i*n_trials:(i+1)*n_trials]=x_pre[i]
     clase[clase==-1]=0
-    #perf_orig[k]=miscellaneous_sparseauto.classifier(x,clase[:,1],1)
+    perf_orig[k,0]=miscellaneous_sparseauto.classifier(x_auto,clase[:,0],1)
+    perf_orig[k,1]=miscellaneous_sparseauto.classifier(x,clase[:,0],1)
                                 
     # Fit the autoencoders
+    x_auto_torch=Variable(torch.from_numpy(np.array(x_auto,dtype=np.float32)),requires_grad=False)
     x_torch=Variable(torch.from_numpy(np.array(x,dtype=np.float32)),requires_grad=False)
     clase_torch=Variable(torch.from_numpy(np.array(clase[:,0],dtype=np.int64)),requires_grad=False) # Only dim0 (direction)
-    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init) 
-    loss_rec_vec,loss_ce_vec,loss_sp_vec,loss_vec,data_epochs,data_hidden=miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_torch,clase=clase_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=betar,betac=betac,betas=betas,p_norm=p_norm)
+    
+    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
+    miscellaneous_sparseauto.fit_autoencoder(model=model,data=data_pre,data_cv=data_pre,clase=clase_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=betar,betac=betac,betas=betas,p_norm=p_norm)
+    
+    loss_rec_vec,loss_ce_vec,loss_sp_vec,loss_vec,data_epochs,data_hidden=miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_auto_torch,data_cv=x_torch,clase=clase_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=betar,betac=betac,betas=betas,p_norm=p_norm)
     loss_epochs[k,:,0]=loss_rec_vec
     loss_epochs[k,:,1]=loss_ce_vec
     loss_epochs[k,:,2]=loss_sp_vec
@@ -140,16 +147,18 @@ for k in range(n_files):
         perfh_dire[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,0],1) # Decode direction
         perfh_speed[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,1],1) # Decode Speed
 
+print ('Perf input ',np.mean(perf_orig,axis=0))
+
 # Plot Loss
-# loss_m=np.mean(loss_epochs,axis=0)
-# plt.plot(loss_m[:,0],color='blue',label='Reconstr.')
-# plt.plot(loss_m[:,1],color='red',label='Class.')
-# plt.plot(loss_m[:,2],color='green',label='Sparsity')
-# plt.plot(loss_m[:,3],color='black',label='Total')
-# plt.ylabel('Training Loss')
-# plt.xlabel('Epochs')
-# plt.legend(loc='best')
-# plt.show()
+loss_m=np.mean(loss_epochs,axis=0)
+plt.plot(loss_m[:,0],color='blue',label='Reconstr.')
+plt.plot(loss_m[:,1],color='red',label='Class.')
+plt.plot(loss_m[:,2],color='green',label='Sparsity')
+plt.plot(loss_m[:,3],color='black',label='Total')
+plt.ylabel('Training Loss')
+plt.xlabel('Epochs')
+plt.legend(loc='best')
+plt.show()
         
 # Plot performance
 #perf_m=np.mean(perf_orig,axis=0)
