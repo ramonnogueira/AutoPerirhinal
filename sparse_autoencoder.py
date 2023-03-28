@@ -96,10 +96,10 @@ lr=1e-2 # learning rate
 n_epochs=200 #number of max epochs if conv criteria is not reached
 
 # Define the stimulus
-x_pre=np.array([[-1,-1],
-                [-1,1],
-                [1,-1],
-                [1,1]])
+x0=np.array([[-1,-1],
+             [-1,1],
+             [1,-1],
+             [1,1]])
 
 perf_orig=np.zeros((n_files,2,2))
 perf_dire=np.zeros((n_files,n_epochs,2))
@@ -111,13 +111,18 @@ perfh_speed=np.zeros((n_files,n_epochs,2))
 loss_epochs=np.zeros((n_files,n_epochs,4))
 for k in range(n_files):
     print (k)
-    mat_exp_pre=np.random.normal(0,1/np.sqrt(n_inp),(2,n_inp))
+    # Data Model pretraining
+    mat_pre=np.random.normal(0,1/np.sqrt(n_inp),(2,n_inp))
+    x_pre=np.dot(x0,mat_pre)
+    x_pretrain=np.zeros((len(x0)*n_trials,n_inp)) 
+    # Data fit CV
     mat_exp=np.random.normal(0,1/np.sqrt(n_inp),(2,n_inp))
-    x_exp=np.dot(delta*x_pre,mat_exp)
-    x_auto=np.zeros((len(x_pre)*n_trials,n_inp)) # Dataset to train the autoencoder and the additional cross-entropy for the additional unit
-    x=np.zeros((len(x_pre)*n_trials,n_inp)) # Dataset to train/test the classifiers
-    clase=np.zeros((len(x_pre)*n_trials,2)) # dim0: direction, dim1: speed
-    for i in range(len(x_pre)):
+    x_exp=np.dot(x0,mat_exp)
+    x_auto=np.zeros((len(x0)*n_trials,n_inp)) # Dataset to train the autoencoder and the additional cross-entropy for the additional unit
+    x=np.zeros((len(x0)*n_trials,n_inp)) # Dataset to train/test the classifiers
+    clase=np.zeros((len(x0)*n_trials,2)) # dim0: direction, dim1: speed
+    for i in range(len(x0)):
+        x_pretrain[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_pre[i],sig_inp,(n_trials,n_inp)))
         x_auto[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_exp[i],sig_inp,(n_trials,n_inp)))
         x[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_exp[i],sig_inp,(n_trials,n_inp)))
         clase[i*n_trials:(i+1)*n_trials]=x_pre[i]
@@ -126,13 +131,16 @@ for k in range(n_files):
     perf_orig[k,1]=miscellaneous_sparseauto.classifier(x,clase[:,0],1)
                                 
     # Fit the autoencoders
+    x_pretrain_torch=Variable(torch.from_numpy(np.array(x_pretrain,dtype=np.float32)),requires_grad=False)
     x_auto_torch=Variable(torch.from_numpy(np.array(x_auto,dtype=np.float32)),requires_grad=False)
     x_torch=Variable(torch.from_numpy(np.array(x,dtype=np.float32)),requires_grad=False)
     clase_torch=Variable(torch.from_numpy(np.array(clase[:,0],dtype=np.int64)),requires_grad=False) # Only dim0 (direction)
-    
+
+    # Model pretraining
     model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
-    miscellaneous_sparseauto.fit_autoencoder(model=model,data=data_pre,data_cv=data_pre,clase=clase_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=betar,betac=betac,betas=betas,p_norm=p_norm)
-    
+    miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain,data_cv=x_pretrain,clase=clase_torch,n_epochs=int(0.25*n_epochs),batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=1,betac=0,betas=0,p_norm=p_norm)
+
+    # Model training
     loss_rec_vec,loss_ce_vec,loss_sp_vec,loss_vec,data_epochs,data_hidden=miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_auto_torch,data_cv=x_torch,clase=clase_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=betar,betac=betac,betas=betas,p_norm=p_norm)
     loss_epochs[k,:,0]=loss_rec_vec
     loss_epochs[k,:,1]=loss_ce_vec
