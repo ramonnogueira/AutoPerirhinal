@@ -87,7 +87,7 @@ betas=10
 p_norm=2
 
 n_trials=100
-n_files=5 # number of files (sessions)
+n_files=2 # number of files (sessions)
 
 delta=1
 
@@ -125,7 +125,7 @@ for k in range(n_files):
         x_pretrain[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_pre[i],sig_inp,(n_trials,n_inp)))
         x_auto[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_exp[i],sig_inp,(n_trials,n_inp)))
         x[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_exp[i],sig_inp,(n_trials,n_inp)))
-        clase[i*n_trials:(i+1)*n_trials]=x_pre[i]
+        clase[i*n_trials:(i+1)*n_trials]=x0[i]
     clase[clase==-1]=0
     perf_orig[k,0]=miscellaneous_sparseauto.classifier(x_auto,clase[:,0],1)
     perf_orig[k,1]=miscellaneous_sparseauto.classifier(x,clase[:,0],1)
@@ -137,10 +137,13 @@ for k in range(n_files):
     clase_torch=Variable(torch.from_numpy(np.array(clase[:,0],dtype=np.int64)),requires_grad=False) # Only dim0 (direction)
 
     # Model pretraining
-    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
-    miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain,data_cv=x_pretrain,clase=clase_torch,n_epochs=int(0.25*n_epochs),batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=1,betac=0,betas=0,p_norm=p_norm)
+    #print ('Pretraining model...')
+    #model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
+    #miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=int(0.25*n_epochs),batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
 
     # Model training
+    print ('Training model...')
+    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
     loss_rec_vec,loss_ce_vec,loss_sp_vec,loss_vec,data_epochs,data_hidden=miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_auto_torch,data_cv=x_torch,clase=clase_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=betar,betac=betac,betas=betas,p_norm=p_norm)
     loss_epochs[k,:,0]=loss_rec_vec
     loss_epochs[k,:,1]=loss_ce_vec
@@ -150,8 +153,8 @@ for k in range(n_files):
     for i in range(n_epochs):
         perf_dire[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,0],1) # Decode direction
         perf_speed[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,1],1) # Decode Speed
-        perf_dire_diff[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,0],1) # Decode direction
-        perf_speed_diff[k,i]=miscellaneous_sparseauto.classifier(x-data_epochs[i],clase[:,1],1) # Decode Speed
+        perf_dire_diff[k,i]=miscellaneous_sparseauto.classifier(x_auto-data_epochs[i],clase[:,0],1) # Decode direction
+        perf_speed_diff[k,i]=miscellaneous_sparseauto.classifier(x_auto-data_epochs[i],clase[:,1],1) # Decode Speed
         perfh_dire[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,0],1) # Decode direction
         perfh_speed[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,1],1) # Decode Speed
 
