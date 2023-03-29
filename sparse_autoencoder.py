@@ -14,6 +14,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from scipy.stats import sem
 import matplotlib.pyplot as plt
+from numpy.random import permutation
 import pickle as pkl
 import copy
 import torch.nn as nn
@@ -76,24 +77,24 @@ def adjust_spines(ax, spines):
 #noise during training the autoencoder
 sig_neu=0.5 # noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.25 #noise weight initialization autoencoder
+sig_init=0.3#0.25 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 #beta=0.999#0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
 #beta_sp=10
 betar=1e-4
 betac=1
-betas=10
+betas=10#10
 p_norm=2
 
-n_trials=500
+n_trials=100
 n_files=2 # number of files (sessions)
 
 delta=1
 
 batch_size=10 # batch size when fitting network
 lr=1e-2 # learning rate
-n_epochs=50 #number of max epochs if conv criteria is not reached
+n_epochs=200 #number of max epochs 
 
 # Define the stimulus
 x0=np.array([[-1,-1],
@@ -109,6 +110,10 @@ perf_speed_diff=np.zeros((n_files,n_epochs,2))
 perfh_dire=np.zeros((n_files,n_epochs,2))
 perfh_speed=np.zeros((n_files,n_epochs,2))
 loss_epochs=np.zeros((n_files,n_epochs,4))
+perf_xor=np.zeros((n_files,n_epochs,3))
+perf_ccgp=np.zeros((n_files,n_epochs,2,2))
+perfh_xor=np.zeros((n_files,n_epochs,3))
+perfh_ccgp=np.zeros((n_files,n_epochs,2,2))
 for k in range(n_files):
     print (k)
     # Data Model pretraining
@@ -127,8 +132,16 @@ for k in range(n_files):
         x[i*n_trials:(i+1)*n_trials]=(np.random.normal(x_exp[i],sig_inp,(n_trials,n_inp)))
         clase[i*n_trials:(i+1)*n_trials]=x0[i]
     clase[clase==-1]=0
+
+    ind=permutation(np.arange(len(clase)))
+    x_pretrain=x_pretrain[ind]
+    x_auto=x_auto[ind]
+    x=x[ind]
+    clase=clase[ind]
     perf_orig[k,0]=miscellaneous_sparseauto.classifier(x_auto,clase[:,0],1)
     perf_orig[k,1]=miscellaneous_sparseauto.classifier(x,clase[:,0],1)
+
+    geo=miscellaneous_sparseauto.geometry_2D(x,clase,1)
                                 
     # Fit the autoencoders
     x_pretrain_torch=Variable(torch.from_numpy(np.array(x_pretrain,dtype=np.float32)),requires_grad=False)
@@ -158,21 +171,53 @@ for k in range(n_files):
         perfh_dire[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,0],1) # Decode direction
         perfh_speed[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,1],1) # Decode Speed
 
+        geo=miscellaneous_sparseauto.geometry_2D(data_epochs[i],clase,1)
+        perf_xor[k,i]=geo[0][:,1]
+        perf_ccgp[k,i]=geo[1][:,:,1]
+        geoh=miscellaneous_sparseauto.geometry_2D(data_hidden[i],clase,1)
+        perfh_xor[k,i]=geoh[0][:,1]
+        perfh_ccgp[k,i]=geoh[1][:,:,1]
+        
 print ('Perf input ',np.mean(perf_orig,axis=0))
 
+################################
 # Plot Loss
 loss_m=np.mean(loss_epochs,axis=0)
 plt.plot(loss_m[:,0],color='blue',label='Reconstr.')
-plt.plot(loss_m[:,1],color='red',label='Class.')
+#plt.plot(loss_m[:,1],color='red',label='Class.')
 plt.plot(loss_m[:,2],color='green',label='Sparsity')
 plt.plot(loss_m[:,3],color='black',label='Total')
 plt.ylabel('Training Loss')
 plt.xlabel('Epochs')
 plt.legend(loc='best')
 plt.show()
-        
-# Plot performance
-#perf_m=np.mean(perf_orig,axis=0)
+
+#################################
+# Plot geometry
+perf_xor_m=np.mean(perf_xor,axis=0)
+perfh_xor_m=np.mean(perfh_xor,axis=0)
+perf_ccgp_m=np.mean(perf_ccgp,axis=(0,3))
+perfh_ccgp_m=np.mean(perfh_ccgp,axis=(0,3))
+
+plt.plot(perf_xor_m[:,0],color='blue')
+plt.plot(perfh_xor_m[:,0],color='blue',linestyle='--')
+plt.plot(perf_xor_m[:,1],color='red')
+plt.plot(perfh_xor_m[:,1],color='red',linestyle='--')
+plt.plot(perf_xor_m[:,2],color='grey')
+plt.plot(perfh_xor_m[:,2],color='grey',linestyle='--')
+plt.plot(perf_ccgp_m[:,0],color='royalblue')
+plt.plot(perfh_ccgp_m[:,0],color='royalblue',linestyle='--')
+plt.plot(perf_ccgp_m[:,1],color='salmon')
+plt.plot(perfh_ccgp_m[:,1],color='salmon',linestyle='--')
+plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+plt.ylim([0,1.1])
+plt.ylabel('Decoding Performance')
+plt.xlabel('Epochs')
+#plt.legend(loc='best')
+plt.show()
+
+################################
+# Plot final metrics
 perf_dire_m=np.mean(perf_dire,axis=0)
 perf_speed_m=np.mean(perf_speed,axis=0)
 perf_dire_dm=np.mean(perf_dire_diff,axis=0)
