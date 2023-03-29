@@ -82,7 +82,7 @@ n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 #beta=0.999#0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
 #beta_sp=10
-betar=1e-1 #1e-4
+betar=1e-5 #1e-4 [1e-4,1e-8]
 betac=1
 betas=10
 p_norm=2
@@ -140,7 +140,6 @@ for k in range(n_files):
     clase=clase[ind]
     perf_orig[k,0]=miscellaneous_sparseauto.classifier(x_auto,clase[:,0],1)
     perf_orig[k,1]=miscellaneous_sparseauto.classifier(x,clase[:,0],1)
-    #geo=miscellaneous_sparseauto.geometry_2D(x,clase,1)
                                 
     # Fit the autoencoders
     x_pretrain_torch=Variable(torch.from_numpy(np.array(x_pretrain,dtype=np.float32)),requires_grad=False)
@@ -149,15 +148,15 @@ for k in range(n_files):
     clase_torch=Variable(torch.from_numpy(np.array(clase[:,0],dtype=np.int64)),requires_grad=False) # Only dim0 (direction)
 
     # Model pretraining
-    #print ('Pretraining model...')
-    #model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
-    #ep_pt=5
-    #lr_pt=1e-2
-    #miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=ep_pt,batch_size=batch_size,lr=lr_pt,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
+    print ('Pretraining model...')
+    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
+    ep_pt=200
+    lr_pt=1e-2
+    miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=ep_pt,batch_size=batch_size,lr=lr_pt,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
 
     # Model training
     print ('Training model...')
-    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
+    #model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
     loss_rec_vec,loss_ce_vec,loss_sp_vec,loss_vec,data_epochs,data_hidden=miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_auto_torch,data_cv=x_torch,clase=clase_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=betar,betac=betac,betas=betas,p_norm=p_norm)
     loss_epochs[k,:,0]=loss_rec_vec
     loss_epochs[k,:,1]=loss_ce_vec
