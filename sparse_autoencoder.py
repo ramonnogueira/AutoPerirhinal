@@ -82,9 +82,9 @@ n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 #beta=0.999#0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
 #beta_sp=10
-betar=1e-4
+betar=1e-1 #1e-4
 betac=1
-betas=10#10
+betas=10
 p_norm=2
 
 n_trials=100
@@ -140,8 +140,7 @@ for k in range(n_files):
     clase=clase[ind]
     perf_orig[k,0]=miscellaneous_sparseauto.classifier(x_auto,clase[:,0],1)
     perf_orig[k,1]=miscellaneous_sparseauto.classifier(x,clase[:,0],1)
-
-    geo=miscellaneous_sparseauto.geometry_2D(x,clase,1)
+    #geo=miscellaneous_sparseauto.geometry_2D(x,clase,1)
                                 
     # Fit the autoencoders
     x_pretrain_torch=Variable(torch.from_numpy(np.array(x_pretrain,dtype=np.float32)),requires_grad=False)
@@ -152,7 +151,9 @@ for k in range(n_files):
     # Model pretraining
     #print ('Pretraining model...')
     #model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
-    #miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=int(0.25*n_epochs),batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
+    #ep_pt=5
+    #lr_pt=1e-2
+    #miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=ep_pt,batch_size=batch_size,lr=lr_pt,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
 
     # Model training
     print ('Training model...')
@@ -184,9 +185,9 @@ print ('Perf input ',np.mean(perf_orig,axis=0))
 # Plot Loss
 loss_m=np.mean(loss_epochs,axis=0)
 plt.plot(loss_m[:,0],color='blue',label='Reconstr.')
-#plt.plot(loss_m[:,1],color='red',label='Class.')
+plt.plot(loss_m[:,1],color='red',label='Class.')
 plt.plot(loss_m[:,2],color='green',label='Sparsity')
-plt.plot(loss_m[:,3],color='black',label='Total')
+#plt.plot(loss_m[:,3],color='black',label='Total')
 plt.ylabel('Training Loss')
 plt.xlabel('Epochs')
 plt.legend(loc='best')
