@@ -86,14 +86,14 @@ betac=1
 betas=10
 p_norm=2
 
-n_trials=100
+n_trials=500
 n_files=2 # number of files (sessions)
 
 delta=1
 
 batch_size=10 # batch size when fitting network
 lr=1e-2 # learning rate
-n_epochs=200 #number of max epochs if conv criteria is not reached
+n_epochs=50 #number of max epochs if conv criteria is not reached
 
 # Define the stimulus
 x0=np.array([[-1,-1],
