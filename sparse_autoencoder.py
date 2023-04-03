@@ -77,20 +77,16 @@ def adjust_spines(ax, spines):
 #noise during training the autoencoder
 sig_neu=0.5 # noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.3#0.25 #noise weight initialization autoencoder
+sig_init=0.2#0.25 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
-#beta=0.999#0.999 # between 0 and 1. 0 only reconstruction, 1 only decoding
-#beta_sp=10
-betar=1e-5 #1e-4 [1e-4,1e-8]
+betar=1e-4
 betac=1
 betas=10
 p_norm=2
 
 n_trials=100
-n_files=2 # number of files (sessions)
-
-delta=1
+n_files=10 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
 lr=1e-2 # learning rate
@@ -146,17 +142,18 @@ for k in range(n_files):
     x_auto_torch=Variable(torch.from_numpy(np.array(x_auto,dtype=np.float32)),requires_grad=False)
     x_torch=Variable(torch.from_numpy(np.array(x,dtype=np.float32)),requires_grad=False)
     clase_torch=Variable(torch.from_numpy(np.array(clase[:,0],dtype=np.int64)),requires_grad=False) # Only dim0 (direction)
+    #clase_torch=Variable(torch.from_numpy(np.array(clase[:,0],dtype=np.float32)),requires_grad=False) # Only dim0 (direction)
 
     # Model pretraining
-    print ('Pretraining model...')
-    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
-    ep_pt=200
-    lr_pt=1e-2
-    miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=ep_pt,batch_size=batch_size,lr=lr_pt,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
+    #print ('Pretraining model...')
+    #model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
+    #ep_pt=200
+    #lr_pt=1e-2
+    #miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=ep_pt,batch_size=batch_size,lr=lr_pt,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
 
     # Model training
     print ('Training model...')
-    #model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
+    model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
     loss_rec_vec,loss_ce_vec,loss_sp_vec,loss_vec,data_epochs,data_hidden=miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_auto_torch,data_cv=x_torch,clase=clase_torch,n_epochs=n_epochs,batch_size=batch_size,lr=lr,sigma_noise=sig_neu,betar=betar,betac=betac,betas=betas,p_norm=p_norm)
     loss_epochs[k,:,0]=loss_rec_vec
     loss_epochs[k,:,1]=loss_ce_vec
@@ -199,16 +196,16 @@ perfh_xor_m=np.mean(perfh_xor,axis=0)
 perf_ccgp_m=np.mean(perf_ccgp,axis=(0,3))
 perfh_ccgp_m=np.mean(perfh_ccgp,axis=(0,3))
 
-plt.plot(perf_xor_m[:,0],color='blue')
-plt.plot(perfh_xor_m[:,0],color='blue',linestyle='--')
-plt.plot(perf_xor_m[:,1],color='red')
-plt.plot(perfh_xor_m[:,1],color='red',linestyle='--')
+plt.plot(perf_xor_m[:,0],color='red')
+plt.plot(perfh_xor_m[:,0],color='red',linestyle='--')
+plt.plot(perf_xor_m[:,1],color='blue')
+plt.plot(perfh_xor_m[:,1],color='blue',linestyle='--')
 plt.plot(perf_xor_m[:,2],color='grey')
 plt.plot(perfh_xor_m[:,2],color='grey',linestyle='--')
-plt.plot(perf_ccgp_m[:,0],color='royalblue')
-plt.plot(perfh_ccgp_m[:,0],color='royalblue',linestyle='--')
-plt.plot(perf_ccgp_m[:,1],color='salmon')
-plt.plot(perfh_ccgp_m[:,1],color='salmon',linestyle='--')
+plt.plot(perf_ccgp_m[:,0],color='salmon')
+plt.plot(perfh_ccgp_m[:,0],color='salmon',linestyle='--')
+plt.plot(perf_ccgp_m[:,1],color='royalblue')
+plt.plot(perfh_ccgp_m[:,1],color='royalblue',linestyle='--')
 plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
 plt.ylim([0,1.1])
 plt.ylabel('Decoding Performance')

@@ -42,6 +42,7 @@ def fit_autoencoder(model,data,data_cv,clase,n_epochs,batch_size,lr,sigma_noise,
     train_loader=DataLoader(torch.utils.data.TensorDataset(data,data,clase),batch_size=batch_size,shuffle=True)
     optimizer=torch.optim.Adam(model.parameters(), lr=lr)
     loss1=torch.nn.MSELoss()
+    #loss2=torch.nn.MSELoss()
     loss2=torch.nn.CrossEntropyLoss()
     model.train()
     
@@ -54,6 +55,15 @@ def fit_autoencoder(model,data,data_cv,clase,n_epochs,batch_size,lr,sigma_noise,
     t=0
     while t<n_epochs: 
         #print (t)
+        for batch_idx, (targ1, targ2, cla) in enumerate(train_loader):
+            optimizer.zero_grad()
+            output=model(targ1,sigma_noise)
+            loss_r=loss1(output[0],targ2) # reconstruction error
+            loss_cla=loss2(output[2],cla) # cross entropy error
+            loss_s=sparsity_loss(output[2],p_norm)
+            loss_t=(betar*loss_r+betac*loss_cla+betas*loss_s)
+            loss_t.backward() # compute gradient
+            optimizer.step() # weight update
         outp=model(data,sigma_noise)
         outp_cv=model(data_cv,sigma_noise)
         data_epochs.append(outp_cv[0].detach().numpy())# Careful here, this is on the CV data not used for training
@@ -68,15 +78,6 @@ def fit_autoencoder(model,data,data_cv,clase,n_epochs,batch_size,lr,sigma_noise,
         loss_vec.append(loss_total)
         if t==0 or t==(n_epochs-1):
             print (t,'rec ',loss_rec,'ce ',loss_ce,'sp ',loss_sp,'total ',loss_total)
-        for batch_idx, (targ1, targ2, cla) in enumerate(train_loader):
-            optimizer.zero_grad()
-            output=model(targ1,sigma_noise)
-            loss_r=loss1(output[0],targ2) # reconstruction error
-            loss_cla=loss2(output[2],cla) # cross entropy error
-            loss_s=sparsity_loss(output[2],p_norm)
-            loss_t=(betar*loss_r+betac*loss_cla+betas*loss_s)
-            loss_t.backward() # compute gradient
-            optimizer.step() # weight update
         t=(t+1)
     model.eval()
     return np.array(loss_rec_vec),np.array(loss_ce_vec),np.array(loss_sp_vec),np.array(loss_vec),np.array(data_epochs),np.array(data_hidden)
@@ -91,6 +92,7 @@ class sparse_autoencoder_1(nn.Module):
         self.enc=torch.nn.Linear(n_inp,n_hidden)
         self.dec=torch.nn.Linear(n_hidden,n_inp)
         self.dec2=torch.nn.Linear(n_hidden,2)
+        #self.dec2=torch.nn.Linear(n_hidden,1)
         self.apply(self._init_weights)
         
     def _init_weights(self, module):
