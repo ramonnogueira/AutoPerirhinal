@@ -77,7 +77,7 @@ def adjust_spines(ax, spines):
 #noise during training the autoencoder
 sig_neu=0.5 # noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.2#0.25 #noise weight initialization autoencoder
+sig_init=0.25#0.25 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 betar=1e-4
@@ -86,7 +86,7 @@ betas=10
 p_norm=2
 
 n_trials=100
-n_files=10 # number of files (sessions)
+n_files=100 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
 lr=1e-2 # learning rate
@@ -161,7 +161,7 @@ for k in range(n_files):
     loss_epochs[k,:,3]=loss_vec
 
     for i in range(n_epochs):
-        perf_dire[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,0],1) # Decode direction
+        perf_dire[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,0],1) # Decode direction `
         perf_speed[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,1],1) # Decode Speed
         perf_dire_diff[k,i]=miscellaneous_sparseauto.classifier(x_auto-data_epochs[i],clase[:,0],1) # Decode direction
         perf_speed_diff[k,i]=miscellaneous_sparseauto.classifier(x_auto-data_epochs[i],clase[:,1],1) # Decode Speed
@@ -179,15 +179,15 @@ print ('Perf input ',np.mean(perf_orig,axis=0))
 
 ################################
 # Plot Loss
-loss_m=np.mean(loss_epochs,axis=0)
-plt.plot(loss_m[:,0],color='blue',label='Reconstr.')
-plt.plot(loss_m[:,1],color='red',label='Class.')
-plt.plot(loss_m[:,2],color='green',label='Sparsity')
-#plt.plot(loss_m[:,3],color='black',label='Total')
-plt.ylabel('Training Loss')
-plt.xlabel('Epochs')
-plt.legend(loc='best')
-plt.show()
+# loss_m=np.mean(loss_epochs,axis=0)
+# plt.plot(loss_m[:,0],color='blue',label='Reconstr.')
+# plt.plot(loss_m[:,1],color='red',label='Class.')
+# plt.plot(loss_m[:,2],color='green',label='Sparsity')
+# #plt.plot(loss_m[:,3],color='black',label='Total')
+# plt.ylabel('Training Loss')
+# plt.xlabel('Epochs')
+# plt.legend(loc='best')
+# plt.show()
 
 #################################
 # Plot geometry
@@ -196,22 +196,22 @@ perfh_xor_m=np.mean(perfh_xor,axis=0)
 perf_ccgp_m=np.mean(perf_ccgp,axis=(0,3))
 perfh_ccgp_m=np.mean(perfh_ccgp,axis=(0,3))
 
-plt.plot(perf_xor_m[:,0],color='red')
-plt.plot(perfh_xor_m[:,0],color='red',linestyle='--')
-plt.plot(perf_xor_m[:,1],color='blue')
-plt.plot(perfh_xor_m[:,1],color='blue',linestyle='--')
-plt.plot(perf_xor_m[:,2],color='grey')
-plt.plot(perfh_xor_m[:,2],color='grey',linestyle='--')
-plt.plot(perf_ccgp_m[:,0],color='salmon')
-plt.plot(perfh_ccgp_m[:,0],color='salmon',linestyle='--')
-plt.plot(perf_ccgp_m[:,1],color='royalblue')
-plt.plot(perfh_ccgp_m[:,1],color='royalblue',linestyle='--')
-plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
-plt.ylim([0,1.1])
-plt.ylabel('Decoding Performance')
-plt.xlabel('Epochs')
-#plt.legend(loc='best')
-plt.show()
+# plt.plot(perf_xor_m[:,0],color='red')
+# plt.plot(perfh_xor_m[:,0],color='red',linestyle='--')
+# plt.plot(perf_xor_m[:,1],color='blue')
+# plt.plot(perfh_xor_m[:,1],color='blue',linestyle='--')
+# plt.plot(perf_xor_m[:,2],color='grey')
+# plt.plot(perfh_xor_m[:,2],color='grey',linestyle='--')
+# plt.plot(perf_ccgp_m[:,0],color='salmon')
+# plt.plot(perfh_ccgp_m[:,0],color='salmon',linestyle='--')
+# plt.plot(perf_ccgp_m[:,1],color='royalblue')
+# plt.plot(perfh_ccgp_m[:,1],color='royalblue',linestyle='--')
+# plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+# plt.ylim([0,1.1])
+# plt.ylabel('Decoding Performance')
+# plt.xlabel('Epochs')
+# #plt.legend(loc='best')
+# plt.show()
 
 ################################
 # Plot final metrics
@@ -222,40 +222,40 @@ perf_speed_dm=np.mean(perf_speed_diff,axis=0)
 perfh_dire_m=np.mean(perfh_dire,axis=0)
 perfh_speed_m=np.mean(perfh_speed,axis=0)
 
-plt.plot(perf_dire_dm[:,1],color='red',label='Output Direction')
-plt.plot(perf_speed_dm[:,1],color='blue',label='Output Speed')
-#plt.plot(perf_dire_dm[:,0],color='red',linestyle='--',label='Hidden Direction')
-#plt.plot(perf_speed_dm[:,0],color='blue',linestyle='--',label='Hidden Speed')
-#plt.plot(perf_dire_m[:,1],color='red',label='Output Direction')
-#plt.plot(perf_speed_m[:,1],color='blue',label='Output Speed')
-#plt.plot(perf_m[1]*np.ones(n_epochs),color='grey',label='Input')
-plt.plot(perfh_dire_m[:,1],color='red',linestyle='--',label='Hidden Direction')
-plt.plot(perfh_speed_m[:,1],color='blue',linestyle='--',label='Hidden Speed')
-#plt.plot(perf_m[0]*np.ones(n_epochs),color='grey',linestyle='--')
-plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
-plt.ylim([0,1.1])
-plt.ylabel('Decoding Performance')
-plt.xlabel('Epochs')
-plt.legend(loc='best')
-plt.show()
+# plt.plot(perf_dire_dm[:,1],color='red',label='Output Direction')
+# plt.plot(perf_speed_dm[:,1],color='blue',label='Output Speed')
+# #plt.plot(perf_dire_dm[:,0],color='red',linestyle='--',label='Hidden Direction')
+# #plt.plot(perf_speed_dm[:,0],color='blue',linestyle='--',label='Hidden Speed')
+# #plt.plot(perf_dire_m[:,1],color='red',label='Output Direction')
+# #plt.plot(perf_speed_m[:,1],color='blue',label='Output Speed')
+# #plt.plot(perf_m[1]*np.ones(n_epochs),color='grey',label='Input')
+# plt.plot(perfh_dire_m[:,1],color='red',linestyle='--',label='Hidden Direction')
+# plt.plot(perfh_speed_m[:,1],color='blue',linestyle='--',label='Hidden Speed')
+# #plt.plot(perf_m[0]*np.ones(n_epochs),color='grey',linestyle='--')
+# plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+# plt.ylim([0,1.1])
+# plt.ylabel('Decoding Performance')
+# plt.xlabel('Epochs')
+# plt.legend(loc='best')
+# plt.show()
 
 # Plot Direction
-# fig=plt.figure(figsize=(5,2))
-# ax=fig.add_subplot(1,2,1)
-# adjust_spines(ax,['left','bottom'])
-# plt.plot(perf_dire_dm[:,1],color='black')
-# plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
-# ax.set_ylim([0.4,1])
-# ax.set_title('Decode Direction')
-# ax.set_ylabel('Decoding Performance')
-# ax.set_xlabel('Training Stage')
+fig=plt.figure(figsize=(5,2))
+ax=fig.add_subplot(1,2,1)
+adjust_spines(ax,['left','bottom'])
+plt.plot(perf_dire_dm[:,1],color='black')
+plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+ax.set_ylim([0.4,1])
+ax.set_title('Decode Direction')
+ax.set_ylabel('Decoding Performance')
+ax.set_xlabel('Training Stage')
 
 # # Plot Speed
-# ax=fig.add_subplot(1,2,2)
-# adjust_spines(ax,['left','bottom'])
-# plt.plot(perf_speed_dm[:,1],color='black')
-# plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
-# ax.set_ylim([0.4,1])
-# ax.set_title('Decode Speed')
-# ax.set_xlabel('Training Stage')
-# fig.savefig('/home/ramon/Documents/github_repos/AutoPerirhinal/plots/decoding_direction_speed.pdf',dpi=500,bbox_inches='tight')
+ax=fig.add_subplot(1,2,2)
+adjust_spines(ax,['left','bottom'])
+plt.plot(perf_speed_dm[:,1],color='black')
+plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+ax.set_ylim([0.4,1])
+ax.set_title('Decode Speed')
+ax.set_xlabel('Training Stage')
+fig.savefig('/home/ramon/Dropbox/JerryChen/figure/decoding_direction_speed.pdf',dpi=500,bbox_inches='tight')
