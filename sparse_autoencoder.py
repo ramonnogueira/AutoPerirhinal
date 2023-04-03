@@ -77,7 +77,7 @@ def adjust_spines(ax, spines):
 #noise during training the autoencoder
 sig_neu=0.5 # noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.25#0.25 #noise weight initialization autoencoder
+sig_init=0.3#0.25 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 betar=1e-4
@@ -86,7 +86,7 @@ betas=10
 p_norm=2
 
 n_trials=100
-n_files=100 # number of files (sessions)
+n_files=5 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
 lr=1e-2 # learning rate
@@ -222,6 +222,13 @@ perf_speed_dm=np.mean(perf_speed_diff,axis=0)
 perfh_dire_m=np.mean(perfh_dire,axis=0)
 perfh_speed_m=np.mean(perfh_speed,axis=0)
 
+perf_dire_std=sem(perf_dire,axis=0)
+perf_speed_std=sem(perf_speed,axis=0)
+perf_dire_dstd=sem(perf_dire_diff,axis=0)
+perf_speed_dstd=sem(perf_speed_diff,axis=0)
+perfh_dire_std=sem(perfh_dire,axis=0)
+perfh_speed_std=sem(perfh_speed,axis=0)
+
 # plt.plot(perf_dire_dm[:,1],color='red',label='Output Direction')
 # plt.plot(perf_speed_dm[:,1],color='blue',label='Output Speed')
 # #plt.plot(perf_dire_dm[:,0],color='red',linestyle='--',label='Hidden Direction')
@@ -243,7 +250,8 @@ perfh_speed_m=np.mean(perfh_speed,axis=0)
 fig=plt.figure(figsize=(5,2))
 ax=fig.add_subplot(1,2,1)
 adjust_spines(ax,['left','bottom'])
-plt.plot(perf_dire_dm[:,1],color='black')
+plt.errorbar(np.arange(n_epochs),perf_dire_dm[:,1],perf_dire_dstd[:,1],color='black')
+#plt.plot(perf_dire_dm[:,1],color='black',linewidth=3)
 plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
 ax.set_ylim([0.4,1])
 ax.set_title('Decode Direction')
@@ -253,7 +261,8 @@ ax.set_xlabel('Training Stage')
 # # Plot Speed
 ax=fig.add_subplot(1,2,2)
 adjust_spines(ax,['left','bottom'])
-plt.plot(perf_speed_dm[:,1],color='black')
+plt.errorbar(np.arange(n_epochs),perf_speed_dm[:,1],perf_speed_dstd[:,1],color='black')
+#plt.plot(perf_speed_dm[:,1],color='black',linewidth=3)
 plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
 ax.set_ylim([0.4,1])
 ax.set_title('Decode Speed')
