@@ -82,7 +82,7 @@ n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 betar=1e-4
 betac=1
-betas=0#10
+betas=100
 p_norm=2
 
 n_trials=100
@@ -246,29 +246,42 @@ plt.xlabel('Epochs')
 plt.legend(loc='best')
 plt.show()
 
-# Supp 1
-# Plot Direction
-fig=plt.figure(figsize=(5,2))
-ax=fig.add_subplot(1,2,1)
-adjust_spines(ax,['left','bottom'])
-plt.errorbar(np.arange(n_epochs),perf_dire_dm[:,1],perf_dire_dstd[:,1],color='black')
-#plt.plot(perf_dire_dm[:,1],color='black',linewidth=3)
-plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
-ax.set_ylim([0.4,1])
-ax.set_title('Decode Direction')
-ax.set_ylabel('Decoding Performance')
-ax.set_xlabel('Training Stage')
+# # Plot Direction
+# fig=plt.figure(figsize=(5,2))
+# ax=fig.add_subplot(1,2,1)
+# adjust_spines(ax,['left','bottom'])
+# plt.errorbar(np.arange(n_epochs),perf_dire_dm[:,1],perf_dire_dstd[:,1],color='black')
+# #plt.plot(perf_dire_dm[:,1],color='black',linewidth=3)
+# plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+# ax.set_ylim([0.4,1])
+# ax.set_title('Decode Direction')
+# ax.set_ylabel('Decoding Performance')
+# ax.set_xlabel('Training Stage')
 
-# # Plot Speed
-ax=fig.add_subplot(1,2,2)
+# # # Plot Speed
+# ax=fig.add_subplot(1,2,2)
+# adjust_spines(ax,['left','bottom'])
+# plt.errorbar(np.arange(n_epochs),perf_speed_dm[:,1],perf_speed_dstd[:,1],color='black')
+# #plt.plot(perf_speed_dm[:,1],color='black',linewidth=3)
+# plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+# ax.set_ylim([0.4,1])
+# ax.set_title('Decode Speed')
+# ax.set_xlabel('Training Stage')
+# fig.savefig('/home/ramon/Dropbox/JerryChen/figure/decoding_direction_speed_supp4.pdf',dpi=500,bbox_inches='tight')
+
+# Supp figures
+fig=plt.figure(figsize=(2.5,2))
+ax=fig.add_subplot(1,1,1)
 adjust_spines(ax,['left','bottom'])
-plt.errorbar(np.arange(n_epochs),perf_speed_dm[:,1],perf_speed_dstd[:,1],color='black')
-#plt.plot(perf_speed_dm[:,1],color='black',linewidth=3)
-plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
+ax.errorbar(np.arange(n_epochs),perf_dire_m[:,1],perf_dire_std[:,1],color='red',label='Output Direction')
+ax.errorbar(np.arange(n_epochs),perf_speed_m[:,1],perf_speed_std[:,1],color='blue',label='Output Speed')
+ax.errorbar(np.arange(n_epochs),perfh_dire_m[:,1],perfh_dire_std[:,1],color='red',linestyle='--',label='Hidden Direction')
+ax.errorbar(np.arange(n_epochs),perfh_speed_m[:,1],perfh_speed_std[:,1],color='blue',linestyle='--',label='Hidden Speed')
+ax.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
 ax.set_ylim([0.4,1])
-ax.set_title('Decode Speed')
 ax.set_xlabel('Training Stage')
-fig.savefig('/home/ramon/Dropbox/JerryChen/figure/decoding_direction_speed_supp2.pdf',dpi=500,bbox_inches='tight')
+plt.legend(loc='best')
+fig.savefig('/home/ramon/Dropbox/JerryChen/figure/decoding_direction_speed_supp3.pdf',dpi=500,bbox_inches='tight')
 
 # Main Figure
 # Plot Direction
