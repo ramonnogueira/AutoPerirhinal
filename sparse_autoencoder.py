@@ -82,11 +82,11 @@ n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 betar=1e-4
 betac=1
-betas=100
+betas=10
 p_norm=2
 
 n_trials=100
-n_files=50 # number of files (sessions)
+n_files=5 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
 lr=1e-2 # learning rate
@@ -273,10 +273,14 @@ plt.show()
 fig=plt.figure(figsize=(2.5,2))
 ax=fig.add_subplot(1,1,1)
 adjust_spines(ax,['left','bottom'])
-ax.errorbar(np.arange(n_epochs),perf_dire_m[:,1],perf_dire_std[:,1],color='red',label='Output Direction')
-ax.errorbar(np.arange(n_epochs),perf_speed_m[:,1],perf_speed_std[:,1],color='blue',label='Output Speed')
-ax.errorbar(np.arange(n_epochs),perfh_dire_m[:,1],perfh_dire_std[:,1],color='red',linestyle='--',label='Hidden Direction')
-ax.errorbar(np.arange(n_epochs),perfh_speed_m[:,1],perfh_speed_std[:,1],color='blue',linestyle='--',label='Hidden Speed')
+#ax.errorbar(np.arange(n_epochs),perf_dire_m[:,1],perf_dire_std[:,1],color='red',label='Output Direction')
+#ax.errorbar(np.arange(n_epochs),perf_speed_m[:,1],perf_speed_std[:,1],color='blue',label='Output Speed')
+#ax.errorbar(np.arange(n_epochs),perfh_dire_m[:,1],perfh_dire_std[:,1],color='red',linestyle='--',label='Hidden Direction')
+#ax.errorbar(np.arange(n_epochs),perfh_speed_m[:,1],perfh_speed_std[:,1],color='blue',linestyle='--',label='Hidden Speed')
+ax.plot(np.arange(n_epochs),perf_dire_m[:,1],color='red',label='Output Direction')
+ax.plot(np.arange(n_epochs),perf_speed_m[:,1],color='blue',label='Output Speed')
+ax.plot(np.arange(n_epochs),perfh_dire_m[:,1],color='black',linestyle='--',label='Hidden Direction')
+ax.plot(np.arange(n_epochs),perfh_speed_m[:,1],color='brown',linestyle='--',label='Hidden Speed')
 ax.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
 ax.set_ylim([0.4,1])
 ax.set_xlabel('Training Stage')
