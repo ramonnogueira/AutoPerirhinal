@@ -68,16 +68,16 @@ def fit_autoencoder(model,data,data_cv,clase,n_epochs,batch_size,lr,sigma_noise,
         outp_cv=model(data_cv,sigma_noise)
         data_epochs.append(outp_cv[0].detach().numpy())# Careful here, this is on the CV data not used for training
         data_hidden.append(outp_cv[1].detach().numpy())# Careful here, this is on the CV data not used for training
-        loss_rec=loss1(outp[0],data).item()
-        loss_ce=loss2(outp[2],clase).item()
-        loss_sp=sparsity_loss(outp[1],p_norm).item()
+        loss_rec=loss1(outp[0],data).item() #Reconstruction loss
+        loss_ce=loss2(outp[2],clase).item() #Additional readout unit from hidden layer
+        loss_sp=sparsity_loss(outp[1],p_norm).item() #Sparsity on hidden layer
         loss_total=(betar*loss_rec+betac*loss_ce+betas*loss_sp)
         loss_rec_vec.append(loss_rec)
         loss_ce_vec.append(loss_ce)
         loss_sp_vec.append(loss_sp)
         loss_vec.append(loss_total)
-        if t==0 or t==(n_epochs-1):
-            print (t,'rec ',loss_rec,'ce ',loss_ce,'sp ',loss_sp,'total ',loss_total)
+        #if t==0 or t==(n_epochs-1):
+        print (t,'rec ',loss_rec,'ce ',loss_ce,'sp ',loss_sp,'total ',loss_total)
         t=(t+1)
     model.eval()
     return np.array(loss_rec_vec),np.array(loss_ce_vec),np.array(loss_sp_vec),np.array(loss_vec),np.array(data_epochs),np.array(data_hidden)
@@ -101,9 +101,9 @@ class sparse_autoencoder_1(nn.Module):
                 module.bias.data.normal_(mean=0.0, std=self.sigma_init)
         
     def forward(self,x,sigma_noise):
-        x_hidden = F.relu(self.enc(x))+sigma_noise*torch.randn(x.size(0),self.n_hidden)
-        x = self.dec(x_hidden)
-        x2 = self.dec2(x_hidden)
+        x_hidden = F.relu(self.enc(x))+sigma_noise*torch.randn(x.size(0),self.n_hidden) # Hidden layer
+        x = self.dec(x_hidden) # Output layer
+        x2 = self.dec2(x_hidden) # Additional readout unit from the hidden layer
         return x,x_hidden,x2
 
 def sparsity_loss(data,p):
