@@ -92,7 +92,7 @@ def adjust_spines(ax, spines):
 #noise during training the autoencoder
 sig_neu=1 # noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.35#0.35 #noise weight initialization autoencoder
+sig_init=0.4#0.35 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
 betar=0.2#0.2#1e-4
@@ -101,11 +101,11 @@ betas=8#10
 p_norm=1
 
 n_trials=100
-n_files=100 # number of files (sessions)
+n_files=20 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
-lr=1e-4 # learning rate
-n_epochs=400 #number of max epochs 
+lr=5*1e-4 # learning rate
+n_epochs=200 #number of max epochs 
 
 # Define the stimulus
 x0=np.array([[-1,-1],
@@ -185,12 +185,12 @@ for k in range(n_files):
         perfh_dire[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,0],1) # Decode direction
         perfh_speed[k,i]=miscellaneous_sparseauto.classifier(data_hidden[i],clase[:,1],1) # Decode Speed
 
-        geo=miscellaneous_sparseauto.geometry_2D(data_epochs[i],clase,1)
-        perf_xor[k,i]=geo[0][:,1]
-        perf_ccgp[k,i]=geo[1][:,:,1]
-        geoh=miscellaneous_sparseauto.geometry_2D(data_hidden[i],clase,1)
-        perfh_xor[k,i]=geoh[0][:,1]
-        perfh_ccgp[k,i]=geoh[1][:,:,1]
+        # geo=miscellaneous_sparseauto.geometry_2D(data_epochs[i],clase,1)
+        # perf_xor[k,i]=geo[0][:,1]
+        # perf_ccgp[k,i]=geo[1][:,:,1]
+        # geoh=miscellaneous_sparseauto.geometry_2D(data_hidden[i],clase,1)
+        # perfh_xor[k,i]=geoh[0][:,1]
+        # perfh_ccgp[k,i]=geoh[1][:,:,1]
         
 print ('Perf input ',np.mean(perf_orig,axis=0))
 
@@ -206,12 +206,12 @@ print ('Perf input ',np.mean(perf_orig,axis=0))
 # plt.legend(loc='best')
 # plt.show()
 
-#################################
-# Plot geometry
-perf_xor_m=np.mean(perf_xor,axis=0)
-perfh_xor_m=np.mean(perfh_xor,axis=0)
-perf_ccgp_m=np.mean(perf_ccgp,axis=(0,3))
-perfh_ccgp_m=np.mean(perfh_ccgp,axis=(0,3))
+# #################################
+# # Plot geometry
+# perf_xor_m=np.mean(perf_xor,axis=0)
+# perfh_xor_m=np.mean(perfh_xor,axis=0)
+# perf_ccgp_m=np.mean(perf_ccgp,axis=(0,3))
+# perfh_ccgp_m=np.mean(perfh_ccgp,axis=(0,3))
 
 # plt.plot(perf_xor_m[:,0],color='red')
 # plt.plot(perfh_xor_m[:,0],color='red',linestyle='--')

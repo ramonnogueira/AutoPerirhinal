@@ -76,8 +76,8 @@ def fit_autoencoder(model,data,data_cv,clase,n_epochs,batch_size,lr,sigma_noise,
         loss_ce_vec.append(loss_ce)
         loss_sp_vec.append(loss_sp)
         loss_vec.append(loss_total)
-        #if t==0 or t==(n_epochs-1):
-        print (t,'rec ',loss_rec,'ce ',loss_ce,'sp ',loss_sp,'total ',loss_total)
+        if t==0 or t==(n_epochs-1):
+            print (t,'rec ',loss_rec,'ce ',loss_ce,'sp ',loss_sp,'total ',loss_total)
         t=(t+1)
     model.eval()
     return np.array(loss_rec_vec),np.array(loss_ce_vec),np.array(loss_sp_vec),np.array(loss_vec),np.array(data_epochs),np.array(data_hidden)
