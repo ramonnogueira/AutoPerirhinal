@@ -90,22 +90,22 @@ def adjust_spines(ax, spines):
 #############################
 # Parameters Training
 #noise during training the autoencoder
-sig_neu=1 # noise neurons autoencoder
+sig_neu=1 #1 noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.4#0.35 #noise weight initialization autoencoder
+sig_init=0.5#0.5#0.4#0.35 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
-betar=0.2#0.2#1e-4
-betac=5#5#1#10
-betas=8#10
+betar=0.1#1,0.1
+betac=10#5#1#10
+betas=10#8#10
 p_norm=1
 
 n_trials=100
-n_files=20 # number of files (sessions)
+n_files=100 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
-lr=5*1e-4 # learning rate
-n_epochs=200 #number of max epochs 
+lr=3*1e-3 #5*1e-4 learning rate
+n_epochs=50 #number of max epochs 
 
 # Define the stimulus
 x0=np.array([[-1,-1],
@@ -160,11 +160,11 @@ for k in range(n_files):
     #clase_torch=Variable(torch.from_numpy(np.array(clase[:,0],dtype=np.float32)),requires_grad=False) # Only dim0 (direction)
 
     # Model pretraining
-    #print ('Pretraining model...')
-    #model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
-    #ep_pt=200
-    #lr_pt=1e-2
-    #miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=ep_pt,batch_size=batch_size,lr=lr_pt,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
+    # print ('Pretraining model...')
+    # model=miscellaneous_sparseauto.sparse_autoencoder_1(n_inp=n_inp,n_hidden=n_hidden,sigma_init=sig_init)
+    # ep_pt=5
+    # lr_pt=1e-4
+    # miscellaneous_sparseauto.fit_autoencoder(model=model,data=x_pretrain_torch,data_cv=x_pretrain_torch,clase=clase_torch,n_epochs=ep_pt,batch_size=batch_size,lr=lr_pt,sigma_noise=sig_neu,betar=1,betac=0,betas=betas,p_norm=p_norm)
 
     # Model training
     print ('Training model...')
@@ -176,8 +176,8 @@ for k in range(n_files):
     loss_epochs[k,:,3]=loss_vec
 
     for i in range(n_epochs):
-        if i%100==0:
-            print ('Epoch ',i)
+        #if i%100==0:
+        #    print ('Epoch ',i)
         perf_dire[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,0],1) # Decode direction `
         perf_speed[k,i]=miscellaneous_sparseauto.classifier(data_epochs[i],clase[:,1],1) # Decode Speed
         perf_dire_diff[k,i]=miscellaneous_sparseauto.classifier(x_auto-data_epochs[i],clase[:,0],1) # Decode direction
