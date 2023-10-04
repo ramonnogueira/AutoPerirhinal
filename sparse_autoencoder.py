@@ -92,19 +92,19 @@ def adjust_spines(ax, spines):
 #noise during training the autoencoder
 sig_neu=1 #1 noise neurons autoencoder
 sig_inp=0.5 # noise input
-sig_init=0.5#0.5#0.4#0.35 #noise weight initialization autoencoder
+sig_init=0.5#0.4#0.35 #noise weight initialization autoencoder
 n_inp=10
 n_hidden=20 # number hidden units in the autoencoder
-betar=0.1#1,0.1
-betac=10#5#1#10
-betas=10#8#10
+betar=0.1# Beta 1: 1, Beta 2: 1, Beta 3: 0.1, Beta 4: 0.1
+betac=1#1 # Beta 1: 0, Beta 2: 1, Beta 3: 1, Beta 4: 1
+betas=20#1 Beta 1: 0, Beta 2: 0, Beta 3: 1, Beta 4: 20
 p_norm=1
 
 n_trials=100
 n_files=100 # number of files (sessions)
 
 batch_size=10 # batch size when fitting network
-lr=3*1e-3 #5*1e-4 learning rate
+lr=2*1e-3 #Beta 1: 1e-2, Beta 2: 1e-2, Beta 3: 2*1e-3, Beta 4: 2*1e-3
 n_epochs=50 #number of max epochs 
 
 # Define the stimulus
@@ -284,7 +284,7 @@ plt.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
 ax.set_ylim([0.4,1])
 ax.set_title('Decode Speed')
 ax.set_xlabel('Training Stage')
-fig.savefig('/home/ramon/Dropbox/JerryChen/figure/decoding_direction_speed_new.pdf',dpi=500,bbox_inches='tight')
+#fig.savefig('/home/ramon/Dropbox/JerryChen/figure/decoding_direction_speed_new.pdf',dpi=500,bbox_inches='tight')
 
 # Supp figures
 fig=plt.figure(figsize=(2.5,2))
@@ -302,7 +302,7 @@ ax.plot(0.5*np.ones(n_epochs),color='black',linestyle='--')
 ax.set_ylim([0.4,1])
 ax.set_xlabel('Training Stage')
 plt.legend(loc='best')
-fig.savefig('/home/ramon/Dropbox/JerryChen/figure/decoding_direction_speed_supp_new.pdf',dpi=500,bbox_inches='tight')
+fig.savefig('/home/ramon/Dropbox/JerryChen/figure/decoding_direction_speed_supp4_new.pdf',dpi=500,bbox_inches='tight')
 
 # Main Figure
 # Plot Direction
