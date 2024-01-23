@@ -54,7 +54,7 @@ def fit_autoencoder(model,data,data_cv,clase,n_epochs,batch_size,lr,sigma_noise,
     data_hidden=[]
     t=0
     while t<n_epochs: 
-        #print (t)
+        print (t)
         for batch_idx, (targ1, targ2, cla) in enumerate(train_loader):
             optimizer.zero_grad()
             output=model(targ1,sigma_noise)
